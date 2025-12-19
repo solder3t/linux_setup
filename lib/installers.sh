@@ -120,40 +120,62 @@ EOF
 }
 
 install_zsh_stack() {
-  state_done zsh && return
+  state_done zsh && {
+    echo "⏭ ZSH stack already installed"
+    return
+  }
+
+  echo "🐚 Installing ZSH stack"
+
+  # Install packages
   case "$PM" in
-    pacman) sudo pacman -S --noconfirm zsh fastfetch lsd ;;
-    dnf) sudo dnf install -y zsh fastfetch lsd ;;
-    apt) sudo apt install -y zsh fastfetch lsd ;;
+    pacman)
+      sudo pacman -S --needed --noconfirm zsh fastfetch lsd
+      ;;
+    dnf)
+      sudo dnf install -y zsh fastfetch lsd
+      ;;
+    apt)
+      sudo apt install -y zsh fastfetch lsd
+      ;;
   esac
 
+  # Oh My Zsh
   if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
-    RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    RUNZSH=no CHSH=no \
+      sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   fi
 
+  # Powerlevel10k
   P10K_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
-  [[ -d "$P10K_DIR" ]] || git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$P10K_DIR"
+  if [[ ! -d "$P10K_DIR" ]]; then
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$P10K_DIR"
+  fi
 
+  # ZSH configs
   cp -n "$ROOT_DIR/zsh/.zshrc" "$HOME/.zshrc"
-  
+
   if [[ -f "$ROOT_DIR/zsh/.p10k.zsh" ]]; then
     cp -n "$ROOT_DIR/zsh/.p10k.zsh" "$HOME/.p10k.zsh"
   fi
 
-# Set zsh as default login shell (robust)
-ZSH_PATH="$(command -v zsh)"
-CURRENT_SHELL="$(getent passwd "$USER" | cut -d: -f7)"
+  # Set zsh as default login shell (script-safe)
+  ZSH_PATH="$(command -v zsh)"
+  CURRENT_SHELL="$(getent passwd "$USER" | cut -d: -f7)"
 
-# Ensure zsh is a valid shell
+  # Ensure zsh is registered
   if ! grep -qx "$ZSH_PATH" /etc/shells; then
     echo "➕ Registering zsh in /etc/shells"
     echo "$ZSH_PATH" | sudo tee -a /etc/shells >/dev/null
   fi
 
-# Change shell using usermod (reliable in scripts)
+  # Change shell using usermod (reliable in automation)
   if [[ "$CURRENT_SHELL" != "$ZSH_PATH" ]]; then
     echo "🔐 Setting zsh as default login shell (requires sudo)"
     sudo usermod -s "$ZSH_PATH" "$USER"
-    echo "✅ Default shell updated (effective after logout/login)"
+    echo "ℹ️ Default shell will change after logout/login or reboot"
   fi
+
+  mark_done zsh
 }
+
