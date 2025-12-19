@@ -151,11 +151,25 @@ install_zsh_stack() {
 
   # 3. Copy configs (ALWAYS SAFE, NEVER SKIPPED)
   echo "📝 Installing zsh configuration files"
-
-  cp -n "$ROOT_DIR/zsh/.zshrc" "$HOME/.zshrc"
-
+  
+  if [[ ! -f "$HOME/.zshrc.installer-backup" ]]; then
+    if [[ -f "$HOME/.zshrc" ]]; then
+      echo "📦 Backing up existing .zshrc"
+      cp "$HOME/.zshrc" "$HOME/.zshrc.installer-backup"
+    fi
+  
+    echo "➡️ Installing repo .zshrc"
+    cp "$ROOT_DIR/zsh/.zshrc" "$HOME/.zshrc"
+  else
+    echo "⏭ .zshrc already managed by installer"
+  fi
+  
+  # p10k config (safe overwrite-once)
   if [[ -f "$ROOT_DIR/zsh/.p10k.zsh" ]]; then
-    cp -n "$ROOT_DIR/zsh/.p10k.zsh" "$HOME/.p10k.zsh"
+    if [[ ! -f "$HOME/.p10k.zsh.installer-backup" && -f "$HOME/.p10k.zsh" ]]; then
+      cp "$HOME/.p10k.zsh" "$HOME/.p10k.zsh.installer-backup"
+    fi
+    cp "$ROOT_DIR/zsh/.p10k.zsh" "$HOME/.p10k.zsh"
   fi
 
   # 4. Set default shell (robust)
