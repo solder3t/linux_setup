@@ -19,7 +19,7 @@
 ## 🚀 Quick Start
 
 ### Clone & run
-
+```bash
 git clone https://github.com/solder3t/linux-setup.git
 cd linux-setup
 chmod +x install.sh
