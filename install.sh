@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO_URL="https://github.com/solder3t/linux-setup"
+REPO_URL="https://github.com/solder3t/linux_setup"
 REPO_BRANCH="main"
-REPO_NAME="linux-setup"
+REPO_NAME="linux_setup"
 
 # --------------------------------------------------
 # Detect curl | bash execution and bootstrap repo
