@@ -1,10 +1,27 @@
 install_android_build_deps() {
-  state_done android_deps && return
+  state_done android_deps && {
+    echo "⏭ Android build dependencies already installed"
+    return
+  }
+
+  echo "📦 Installing Android build dependencies"
+
   case "$PM" in
-    pacman) sudo pacman -Syy --noconfirm $(android_packages) ;;
-    dnf) sudo dnf install -y --skip-unavailable $(android_packages) ;;
-    apt) sudo apt update && sudo apt install -y $(android_packages) ;;
+    pacman)
+      # --needed prevents reinstalling already installed packages
+      sudo pacman -Sy --needed --noconfirm $(android_packages)
+      ;;
+    dnf)
+      # dnf already skips installed packages, but avoid unnecessary upgrades
+      sudo dnf install -y --setopt=install_weak_deps=False \
+        --skip-unavailable $(android_packages)
+      ;;
+    apt)
+      sudo apt update
+      sudo apt install -y --no-install-recommends $(android_packages)
+      ;;
   esac
+
   mark_done android_deps
 }
 
