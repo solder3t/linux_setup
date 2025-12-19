@@ -24,7 +24,9 @@ git clone https://github.com/solder3t/linux-setup.git
 cd linux-setup
 chmod +x install.sh
 ./install.sh
+```
 
 ### One-liner install
 ```bash
 curl -fsSL https://raw.githubusercontent.com/solder3t/linux-setup/main/install.sh | bash
+```
