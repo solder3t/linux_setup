@@ -120,7 +120,7 @@ EOF
 }
 
 install_zsh_stack() {
-  # 1. Install ZSH-related packages
+# Install ZSH-related packages
   if ! state_done zsh_pkgs; then
     echo "📦 Installing zsh packages"
 
@@ -133,7 +133,7 @@ install_zsh_stack() {
     mark_done zsh_pkgs
   fi
 
-  # 2. Install Oh My Zsh + Powerlevel10k
+# Install Oh My Zsh + Powerlevel10k
   if ! state_done zsh_framework; then
     echo "🎨 Installing Oh My Zsh & Powerlevel10k"
 
@@ -149,43 +149,58 @@ install_zsh_stack() {
     mark_done zsh_framework
   fi
 
-  # 3. Copy configs (ALWAYS SAFE, NEVER SKIPPED)
-  echo "📝 Installing zsh configuration files"
+# Install Oh My Zsh plugins
+  ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
   
+  if [[ ! -d "$ZSH_CUSTOM_DIR/plugins/zsh-autosuggestions" ]]; then
+      echo "➕ Installing zsh-autosuggestions"
+      git clone --depth=1 \
+        https://github.com/zsh-users/zsh-autosuggestions \
+        "$ZSH_CUSTOM_DIR/plugins/zsh-autosuggestions"
+  fi
+  
+  if [[ ! -d "$ZSH_CUSTOM_DIR/plugins/zsh-syntax-highlighting" ]]; then
+      echo "➕ Installing zsh-syntax-highlighting"
+      git clone --depth=1 \
+        https://github.com/zsh-users/zsh-syntax-highlighting \
+        "$ZSH_CUSTOM_DIR/plugins/zsh-syntax-highlighting"
+  fi
+
+# Copy configs (ALWAYS SAFE, NEVER SKIPPED)
+  echo "📝 Installing zsh configuration files"
+    
   if [[ ! -f "$HOME/.zshrc.installer-backup" ]]; then
     if [[ -f "$HOME/.zshrc" ]]; then
-      echo "📦 Backing up existing .zshrc"
-      cp "$HOME/.zshrc" "$HOME/.zshrc.installer-backup"
+        echo "📦 Backing up existing .zshrc"
+        cp "$HOME/.zshrc" "$HOME/.zshrc.installer-backup"
     fi
-  
-    echo "➡️ Installing repo .zshrc"
-    cp "$ROOT_DIR/zsh/.zshrc" "$HOME/.zshrc"
-  else
-    echo "⏭ .zshrc already managed by installer"
+    
+      echo "➡️ Installing repo .zshrc"
+      cp "$ROOT_DIR/zsh/.zshrc" "$HOME/.zshrc"
+    else
+      echo "⏭ .zshrc already managed by installer"
   fi
   
-  # p10k config (safe overwrite-once)
+# p10k config (safe overwrite-once)
   if [[ -f "$ROOT_DIR/zsh/.p10k.zsh" ]]; then
     if [[ ! -f "$HOME/.p10k.zsh.installer-backup" && -f "$HOME/.p10k.zsh" ]]; then
-      cp "$HOME/.p10k.zsh" "$HOME/.p10k.zsh.installer-backup"
+       cp "$HOME/.p10k.zsh" "$HOME/.p10k.zsh.installer-backup"
     fi
-    cp "$ROOT_DIR/zsh/.p10k.zsh" "$HOME/.p10k.zsh"
+      cp "$ROOT_DIR/zsh/.p10k.zsh" "$HOME/.p10k.zsh"
   fi
 
-  # 4. Set default shell (robust)
+# Set default shell (robust)
   ZSH_PATH="$(command -v zsh)"
-
+  
   if ! grep -qx "$ZSH_PATH" /etc/shells; then
-    echo "$ZSH_PATH" | sudo tee -a /etc/shells >/dev/null
+      echo "$ZSH_PATH" | sudo tee -a /etc/shells >/dev/null
   fi
-
+  
   CURRENT_SHELL="$(getent passwd "$USER" | cut -d: -f7)"
-
+  
   if [[ "$CURRENT_SHELL" != "$ZSH_PATH" ]]; then
     echo "🔐 Setting zsh as default login shell"
     sudo usermod -s "$ZSH_PATH" "$USER"
     echo "ℹ️ Log out and log back in to apply"
   fi
 }
-
-
