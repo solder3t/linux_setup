@@ -84,14 +84,21 @@ configure_git_lfs() {
 
 configure_ulimits() {
   state_done ulimits && return
-  sudo tee /etc/security/limits.d/99-android-build.conf >/dev/null <<EOF
+
+  echo "⚙️ Configuring ulimits for Android builds"
+
+  # Ensure directory exists (important on Arch / minimal systems)
+  sudo mkdir -p /etc/security/limits.d
+
+  sudo tee /etc/security/limits.d/99-android-build.conf >/dev/null <<'EOF'
 * soft nofile 1048576
 * hard nofile 1048576
-* soft nproc 1048576
-* hard nproc 1048576
-* soft stack unlimited
-* hard stack unlimited
+* soft nproc  1048576
+* hard nproc  1048576
+* soft stack  unlimited
+* hard stack  unlimited
 EOF
+
   mark_done ulimits
 }
 
