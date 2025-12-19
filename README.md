@@ -29,5 +29,8 @@ cd android-linux-setup
 chmod +x install.sh
 ./install.sh
 
-One-liner
-curl -fsSL https://raw.githubusercontent.com/<your-username>/android-linux-setup/main/install.sh | bash
+### One-liner install
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/solder3t/linux-setup/main/install.sh | bash
+
