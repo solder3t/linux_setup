@@ -7,7 +7,7 @@ android_packages() {
       echo "git git-lfs repo gnupg flex bison gperf zip unzip curl zlib-devel libxml2 xsltproc lz4 python3 python3-mako python3-protobuf python3-pip python3-devel perl-Switch openssl-devel schedtool ImageMagick ncurses-devel ncurses-compat-libs ccache rsync java-21-openjdk-devel glibc-devel.i686 libstdc++-devel.i686 zlib-devel.i686 ncurses-devel.i686 readline-devel.i686 bc elfutils-libelf-devel dtc clang llvm lld dwarves gcc-aarch64-linux-gnu gcc-arm-linux-gnu android-tools"
       ;;
     apt)
-      echo "build-essential git git-lfs gnupg flex bison gperf zip unzip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 libncurses-dev lib32ncurses-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc fontconfig imagemagick python3 python3-pip python3-mako python3-protobuf python-is-python3 rsync schedtool ccache lz4 zstd libssl-dev bc libelf-dev device-tree-compiler clang llvm lld dwarves gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi openjdk-21-jdk"
+      echo "build-essential git git-lfs gnupg flex bison gperf zip unzip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 libncurses-dev lib32ncurses-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc fontconfig imagemagick python3 python3-pip python3-mako python3-protobuf python-is-python3 rsync schedtool ccache lz4 zstd libssl-dev bc libelf-dev device-tree-compiler clang llvm lld dwarves openjdk-21-jdk"
       ;;
   esac
 }
