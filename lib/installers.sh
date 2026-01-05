@@ -136,18 +136,14 @@ EOF
 }
 
 install_bash_config() {
-  echo "🐚 Installing linux-setup Bash configuration"
-
+  echo "🐚 Installing Bash config"
   mkdir -p "$HOME/.linux-setup"
   cp "$ROOT_DIR/bash/.bashrc" "$HOME/.linux-setup/bashrc"
 
-  # Only add sourcing block once
-  if ! grep -q "linux-setup bash config" "$HOME/.bashrc" 2>/dev/null; then
+  if ! grep -q "linux-setup bash config" "$HOME/.bashrc"; then
     cat >> "$HOME/.bashrc" <<'EOF'
 
-# ----------------------------------------------------------
 # Source linux-setup bash config
-# ----------------------------------------------------------
 [[ -f "$HOME/.linux-setup/bashrc" ]] && source "$HOME/.linux-setup/bashrc"
 EOF
   fi
