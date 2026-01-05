@@ -9,6 +9,6 @@ load_plugins() {
 run_plugin_hook() {
   local hook="$1"
   for plugin in "${PLUGINS_LOADED[@]}"; do
-    grep -q "plugin_${hook}()" "$plugin" && plugin_${hook}
+    grep -q "plugin_install()" "$plugin" && plugin_install
   done
 }
