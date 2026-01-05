@@ -1,3 +1,4 @@
+: "${PM:?PM not set — detect.sh must be sourced first}"
 install_android_build_deps() {
   state_done android_deps && {
     echo "⏭ Android build dependencies already installed"
