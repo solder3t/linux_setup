@@ -6,6 +6,7 @@
 
 ## ✨ Features
 
+- 🔮 **Interactive TUI**: Select exactly what you want to install
 - 📦 Complete Android **ROM + kernel** build dependencies
 - ⚙️ **Java 21**, Clang/LLVM/LLD, GNU cross-compilers
 - 🧠 Google’s official **repo** tool
@@ -18,15 +19,17 @@
 
 ## 🚀 Quick Start
 
-### Clone & run
+### One-liner (Interactive)
+Run this command to start the interactive installer:
+```bash
+curl -fsSL https://raw.githubusercontent.com/solder3t/linux_setup/main/install.sh | bash
+```
+
+### Manual Install
 ```bash
 git clone https://github.com/solder3t/linux_setup.git
 cd linux_setup
 chmod +x install.sh
-./install.sh
-```
-
-### One-liner install
-```bash
-curl -fsSL https://raw.githubusercontent.com/solder3t/linux_setup/main/install.sh | bash
+./install.sh           # Interactive mode
+./install.sh android   # Headless mode (install specific plugins)
 ```

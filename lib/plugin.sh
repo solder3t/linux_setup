@@ -20,6 +20,9 @@ run_plugin_hook() {
   done
 }
 
+
+INSTALLED_SUMMARY=()
+
 run_selected_plugins() {
   local hook="$1"; shift
   local targets=("$@")
@@ -33,6 +36,11 @@ run_selected_plugins() {
             plugin_"$hook"
           fi
         )
+        # Track success (assuming subshell didn't exit script, which it won't)
+        # Verify success via return code?
+        if [[ $? -eq 0 && "$hook" == "install" ]]; then
+           INSTALLED_SUMMARY+=("$(basename "$(dirname "$plugin")")")
+        fi
       fi
     done
   done

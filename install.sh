@@ -52,6 +52,17 @@ case "$CMD" in
       
       run_default_profile
     fi
+    
+    if [[ ${#INSTALLED_SUMMARY[@]} -gt 0 ]]; then
+        echo
+        echo "✅ Installation Complete!"
+        echo "   Installed plugins:"
+        for p in "${INSTALLED_SUMMARY[@]}"; do
+            echo "   - $p"
+        done
+        echo
+        echo "ℹ️  You may need to log out and back in for some changes to take effect."
+    fi
     ;;
   uninstall)
     run_selected_plugins uninstall "$@"
