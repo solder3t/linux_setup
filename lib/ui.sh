@@ -54,7 +54,7 @@ ui_select_plugins() {
   # 3>&1 1>&2 2>&3 swap needed to capture output of whiptail which goes to stderr
   local choices
   choices=$(whiptail --title "Linux Setup" \
-    --checklist "Select plugins to install:" \
+    --checklist "Select plugins to install:\n(Press 'Space' to select/deselect, 'Enter' to confirm)" \
     20 78 10 \
     "${options[@]}" \
     3>&1 1>&2 2>&3)

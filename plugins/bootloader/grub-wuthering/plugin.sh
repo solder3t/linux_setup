@@ -1,5 +1,5 @@
 plugin_describe() {
-  echo "grub-wuthering - Wuthering GRUB2 themes (interactive + auto-res)"
+  echo "grub-wuthering - Wuthering GRUB2 themes"
 }
 
 _wuthering_choose() {
@@ -42,7 +42,7 @@ plugin_install() {
   [[ -z "$THEME" ]] && THEME="$(_wuthering_choose 'Select GRUB theme:' "${THEMES[@]}")"
 
   if [[ -z "${WUTHERING_SCREEN:-}" ]]; then
-    echo "Detected resolution → suggested: $SCREEN"
+    echo "Detected resolution → suggested: $SCREEN" >&2
     SCREEN="$(_wuthering_choose 'Select screen resolution:' "${SCREENS[@]}")"
   fi
 
