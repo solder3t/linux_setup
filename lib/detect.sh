@@ -1,11 +1,17 @@
-. /etc/os-release
+detect_pm() {
+  if command -v pacman >/dev/null 2>&1; then
+    PM="pacman"
+  elif command -v dnf >/dev/null 2>&1; then
+    PM="dnf"
+  elif command -v apt-get >/dev/null 2>&1; then
+    PM="apt"
+  else
+    echo "❌ Unsupported package manager"
+    exit 1
+  fi
 
-detect_distro() {
-  case "$ID" in
-    arch) PM=pacman ;;
-    fedora) PM=dnf ;;
-    ubuntu|debian|linuxmint|pop) PM=apt ;;
-    *) echo "Unsupported distro: $ID"; exit 1 ;;
-  esac
-  echo "Detected $ID ($PM)"
+  export PM
 }
+
+# Run detection immediately
+detect_pm
