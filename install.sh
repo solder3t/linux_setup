@@ -31,25 +31,17 @@ case "$CMD" in
   install)
     if [[ $# -gt 0 ]]; then
       run_selected_plugins install "$@"
-    else
-      # Check if interactive terminal
-      if [[ -t 0 && -t 1 && -n "${DISPLAY:-}" ]]; then
-         # Only run UI if we have a display term (heuristic)
-         # Actually just -t 0 (stdin is TTY) should be enough for whiptail
-         if command -v whiptail >/dev/null; then
-            echo "🔮 Interactive mode detected"
-            SELECTED_PLUGINS=$(ui_select_plugins) || exit 0
-            if [[ -n "$SELECTED_PLUGINS" ]]; then
-                # Convert space-delimited string to array
-                read -ra TARGETS <<< "$SELECTED_PLUGINS"
-                run_selected_plugins install "${TARGETS[@]}"
-            else
-                echo "⚠️ No plugins selected."
-            fi
-            exit 0
+    elif [[ -t 0 && -t 1 && -n "${DISPLAY:-}" ]] && command -v whiptail >/dev/null; then
+         echo "🔮 Interactive mode detected"
+         SELECTED_PLUGINS=$(ui_select_plugins) || exit 0
+         if [[ -n "$SELECTED_PLUGINS" ]]; then
+             # Convert space-delimited string to array
+             read -ra TARGETS <<< "$SELECTED_PLUGINS"
+             run_selected_plugins install "${TARGETS[@]}"
+         else
+             echo "⚠️ No plugins selected."
          fi
-      fi
-      
+    else
       run_default_profile
     fi
     

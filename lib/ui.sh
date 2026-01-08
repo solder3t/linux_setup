@@ -20,11 +20,11 @@ ui_select_plugins() {
   '
 
   # Gather plugins and descriptions
+  local temp_list=()
+  
   for plugin in "${PLUGINS_LOADED[@]}"; do
-    # Get plugin name from path (e.g. .../plugins/android/plugin.sh -> android)
     plugin_name="$(basename "$(dirname "$plugin")")"
     
-    # Get description safely in subshell
     desc=$(
       source "$plugin"
       if declare -f plugin_describe >/dev/null; then
@@ -33,21 +33,22 @@ ui_select_plugins() {
         echo "$plugin_name"
       fi
     )
-
-    # Clean description for display (remove potential extra formatting)
     desc="${desc//[$'\t\r\n']/ }"
-    desc="${desc%%  *}" # Truncate if multiple spaces? No, just replace newlines.
+    desc="${desc%%  *}"
     
-    # If description doesn't start with name, prepend it for clarity?
-    # No, whiptail shows the tag (name).
-    # Maybe the issue is the sort order?
-    # I'll let it be for now, just robustify the newline handling.
+    # Store as "name|desc" for sorting
+    temp_list+=("$plugin_name|$desc")
+  done
 
-    # Default status: ON for everyone? Or OFF? 
-    # Let's turn ON by default for now, or maybe check if it handles tags.
-    status="OFF"
+  # Sort by name
+  IFS=$'\n' sorted_list=($(sort <<<"${temp_list[*]}"))
+  unset IFS
 
-    options+=("$plugin_name" "$desc" "$status")
+  # Build options array for whiptail
+  for item in "${sorted_list[@]}"; do
+      p_name="${item%%|*}"
+      p_desc="${item#*|}"
+      options+=("$p_name" "$p_desc" "OFF")
   done
 
   # Show checklist
@@ -55,7 +56,7 @@ ui_select_plugins() {
   local choices
   choices=$(whiptail --title "Linux Setup" \
     --checklist "Select plugins to install:\n(Press 'Space' to select/deselect, 'Enter' to confirm)" \
-    20 78 10 \
+    22 78 12 \
     "${options[@]}" \
     3>&1 1>&2 2>&3)
 
