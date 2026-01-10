@@ -27,7 +27,7 @@
 ### One-liner (Interactive)
 Run this command to start the interactive installer:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/solder3t/linux-setup/main/install.sh | bash
+curl -fsSL https://github.com/solder3t/linux-setup/raw/main/install.sh | bash
 ```
 
 ### Manual Install
