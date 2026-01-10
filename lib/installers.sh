@@ -239,6 +239,13 @@ install_bash_config() {
   mkdir -p "$HOME/.linux-setup"
   cp "$ROOT_DIR/bash/.bashrc" "$HOME/.linux-setup/bashrc"
 
+  # Install Starship config
+  if [[ -f "$ROOT_DIR/bash/starship.toml" ]]; then
+      echo "🚀 Installing Starship configuration"
+      mkdir -p "$HOME/.config"
+      cp "$ROOT_DIR/bash/starship.toml" "$HOME/.config/starship.toml"
+  fi
+
   if ! grep -q "linux-setup bash config" "$HOME/.bashrc"; then
     cat >> "$HOME/.bashrc" <<'EOF'
 

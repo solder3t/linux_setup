@@ -28,8 +28,11 @@ run_selected_plugins() {
   local targets=("$@")
 
   for plugin in "${PLUGINS_LOADED[@]}"; do
+    local p_name
+    p_name="$(basename "$(dirname "$plugin")")"
+    
     for t in "${targets[@]}"; do
-      if [[ "$plugin" == *"/$t/"* ]]; then
+      if [[ "$p_name" == "$t" ]]; then
         (
           source "$plugin"
           if declare -f "plugin_$hook" >/dev/null; then
@@ -39,7 +42,7 @@ run_selected_plugins() {
         # Track success (assuming subshell didn't exit script, which it won't)
         # Verify success via return code?
         if [[ $? -eq 0 && "$hook" == "install" ]]; then
-           INSTALLED_SUMMARY+=("$(basename "$(dirname "$plugin")")")
+           INSTALLED_SUMMARY+=("$p_name")
         fi
       fi
     done

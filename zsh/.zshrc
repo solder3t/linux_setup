@@ -1,13 +1,9 @@
-# -------------------------------------------------
 # Powerlevel10k instant prompt (MUST BE AT TOP)
-# -------------------------------------------------
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# -------------------------------------------------
 # Oh My Zsh
-# -------------------------------------------------
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
@@ -23,9 +19,8 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-# -------------------------------------------------
 # Android build environment
-# -------------------------------------------------
+
 #export USE_CCACHE=1
 #export CCACHE_DIR="$HOME/.cache/ccache"
 
@@ -35,12 +30,7 @@ source $ZSH/oh-my-zsh.sh
 #ulimit -n 1048576
 #ulimit -u unlimited
 
-# -------------------------------------------------
 # Icons & aliases
-# -------------------------------------------------
-# -------------------------------------------------
-# Icons & aliases
-# -------------------------------------------------
 
 # ls replacement (eza > lsd > ls)
 if command -v eza >/dev/null; then
@@ -77,19 +67,21 @@ command -v duf >/dev/null && alias df='duf'
 # lazygit
 command -v lazygit >/dev/null && alias lg='lazygit'
 
+# TheFuck
+
+eval $(thefuck --alias)
+eval $(thefuck --alias fk)
+
 # zoxide (z / zi)
 if command -v zoxide >/dev/null; then
-  eval "$(zoxide init zsh)"
+  eval "$(zoxide init zsh --cmd cd)"
 fi
+  alias python="python3"
 
-# -------------------------------------------------
 # Powerlevel10k config
-# -------------------------------------------------
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
-# --------------------------------------------------
 # Post-init console output (safe for p10k)
-# --------------------------------------------------
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd () {
   # Run once per session

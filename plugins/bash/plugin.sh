@@ -3,5 +3,9 @@ plugin_describe() {
 }
 
 plugin_install() {
+  if ! command -v starship >/dev/null; then
+      echo "📦 Installing Starship prompt..."
+      curl -sS https://starship.rs/install.sh | sh -s -- -y
+  fi
   install_bash_config
 }

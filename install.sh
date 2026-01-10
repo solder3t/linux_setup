@@ -18,6 +18,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 source "$ROOT_DIR/lib/state.sh"
 source "$ROOT_DIR/lib/detect.sh"
+source "$ROOT_DIR/lib/packages.sh"
 source "$ROOT_DIR/lib/plugin.sh"
 [[ -f "$ROOT_DIR/lib/installers.sh" ]] && source "$ROOT_DIR/lib/installers.sh"
 [[ -f "$ROOT_DIR/lib/ui.sh" ]] && source "$ROOT_DIR/lib/ui.sh"
@@ -31,15 +32,30 @@ case "$CMD" in
   install)
     if [[ $# -gt 0 ]]; then
       run_selected_plugins install "$@"
-    elif [[ -t 0 && -t 1 && -n "${DISPLAY:-}" ]] && command -v whiptail >/dev/null; then
-         echo "🔮 Interactive mode detected"
-         SELECTED_PLUGINS=$(ui_select_plugins) || exit 0
-         if [[ -n "$SELECTED_PLUGINS" ]]; then
-             # Convert space-delimited string to array
-             read -ra TARGETS <<< "$SELECTED_PLUGINS"
-             run_selected_plugins install "${TARGETS[@]}"
+    elif [[ -t 0 && -t 1 ]]; then
+         # Ensure whiptail is available for interactive mode
+         if ! command -v whiptail >/dev/null; then
+             echo "⚠️ Interactive mode requires 'whiptail'. Attempting to install..."
+             case "$PM" in
+                 pacman) sudo pacman -S --needed --noconfirm libnewt ;;
+                 dnf)    sudo dnf install -y newt ;;
+                 apt)    sudo apt install -y whiptail ;;
+             esac
+         fi
+
+         if command -v whiptail >/dev/null; then
+             echo "🔮 Interactive mode detected"
+             SELECTED_PLUGINS=$(ui_select_plugins) || exit 0
+             if [[ -n "$SELECTED_PLUGINS" ]]; then
+                 # Convert space-delimited string to array
+                 read -ra TARGETS <<< "$SELECTED_PLUGINS"
+                 run_selected_plugins install "${TARGETS[@]}"
+             else
+                 echo "⚠️ No plugins selected."
+             fi
          else
-             echo "⚠️ No plugins selected."
+             echo "⚠️ Interactive mode unavailable (whiptail missing)."
+             run_default_profile
          fi
     else
       run_default_profile
