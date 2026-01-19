@@ -1,6 +1,6 @@
 ## ✅ Supported Distributions
 
-- **Arch Linux** (Arch, CachyOS tested)
+- **Arch Linux** (tested)
 - **Fedora** (Fedora 43 tested)
 - **Ubuntu / Debian-based** (Ubuntu 22.04 / 24.04 tested)
 
