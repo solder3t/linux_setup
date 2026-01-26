@@ -25,4 +25,30 @@ plugin_install() {
         sudo apt install -y fastfetch
         ;;
   esac
+  
+  # Install configuration
+  echo "🔧 Configuring fastfetch..."
+  mkdir -p "$HOME/.config/fastfetch"
+  # Copy config.jsonc from the plugin directory (where this script resides)
+  # We assume the script is sourced, so we use the location relative to the script
+  # or simpler: we know where the plugin is located relative to root if running from root.
+  # But better is to resolve the plugin dir.
+  
+  # However, in this repo structure, source happens from install.sh.
+  # The most robust way in this specific repo context is often locating the file relative to the script file if possible, 
+  # or relying on the fact that we are likely in the repo root or can find it.
+  
+  # Let's check how other plugins handle files or if there's a variable for plugin dir.
+  # `run_selected_plugins` in `lib/plugin.sh` sources the script.
+  # It doesn't seem to export a specific PLUGIN_DIR variable easily accessible inside the function 
+  # without some trickery or assumption.
+  # BUT, we know the path is `plugins/tools/fastfetch/config.jsonc` from the repo root.
+  # install.sh sets ROOT_DIR.
+  
+  if [[ -f "$ROOT_DIR/plugins/tools/fastfetch/config.jsonc" ]]; then
+      cp "$ROOT_DIR/plugins/tools/fastfetch/config.jsonc" "$HOME/.config/fastfetch/config.jsonc"
+      echo "✅ fastfetch configuration installed."
+  else
+      echo "⚠️ Could not find config.jsonc to install."
+  fi
 }
