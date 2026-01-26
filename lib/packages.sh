@@ -16,8 +16,8 @@ pkg_build() {
 
 pkg_libs() {
   case "$PM" in
-    pacman) echo "lib32-zlib lib32-ncurses lib32-readline lib32-gcc-libs lib32-glibc libxslt libxml2 imagemagick libelf" ;;
-    dnf)    echo "zlib-devel libxml2 xsltproc openssl-devel ImageMagick ncurses-devel ncurses-compat-libs glibc-devel.i686 libstdc++-devel.i686 zlib-devel.i686 ncurses-devel.i686 readline-devel.i686 elfutils-libelf-devel" ;;
+    pacman) echo "lib32-zlib lib32-ncurses lib32-readline lib32-gcc-libs lib32-glibc libxslt libxml2 imagemagick libelf fontconfig" ;;
+    dnf)    echo "zlib-devel libxml2 xsltproc openssl-devel ImageMagick ncurses-devel ncurses-compat-libs glibc-devel.i686 libstdc++-devel.i686 zlib-devel.i686 ncurses-devel.i686 readline-devel.i686 elfutils-libelf-devel fontconfig" ;;
     apt)    echo "zlib1g-dev libc6-dev-i386 libncurses-dev lib32ncurses-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc fontconfig imagemagick libssl-dev libelf-dev" ;;
   esac
 }
