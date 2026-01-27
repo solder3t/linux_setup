@@ -18,7 +18,7 @@ plugin_install() {
              if ! command -v add-apt-repository >/dev/null 2>&1; then
                  sudo apt install -y software-properties-common
              fi
-             sudo add-apt-repository -y ppa:zhangsongcui3336/fastfetch
+             sudo add-apt-repository -y ppa:zhangsongcui3371/fastfetch
              sudo apt update
         fi
         
