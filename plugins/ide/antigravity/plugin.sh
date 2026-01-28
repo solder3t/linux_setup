@@ -9,6 +9,26 @@ plugin_install() {
       sudo tee /etc/apt/sources.list.d/antigravity.list > /dev/null
     sudo apt update
     sudo apt install -y antigravity
+  elif [[ "$PM" == "dnf" ]]; then
+    echo "📦 Installing Antigravity for Fedora..."
+    sudo tee /etc/yum.repos.d/antigravity.repo > /dev/null << EOL
+[antigravity-rpm]
+name=Antigravity RPM Repository
+baseurl=https://us-central1-yum.pkg.dev/projects/antigravity-auto-updater-dev/antigravity-rpm
+enabled=1
+gpgcheck=0
+EOL
+    sudo dnf makecache
+    sudo dnf install -y antigravity
+  elif [[ "$PM" == "pacman" ]]; then
+    echo "📦 Installing Antigravity for Arch Linux (AUR)..."
+    setup_aur_helper
+    if [[ -n "$AUR_HELPER" ]]; then
+      $AUR_HELPER -S --needed --noconfirm antigravity
+    else
+      echo "❌ AUR helper required for Antigravity on Arch."
+      exit 1
+    fi
   else
     echo "⚠️ Antigravity installation not yet supported for $PM"
   fi
