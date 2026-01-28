@@ -33,7 +33,7 @@ plugin_install() {
           echo "  -> $font already exists, skipping."
       else
           echo "  ⬇️ Downloading $font..."
-          if curl -fsSL "$BASE_URL/$font" -o "$FONT_DIR/$font"; then
+          if curl -fsSL "$BASE_URL/${font// /%20}" -o "$FONT_DIR/$font"; then
               echo "     ...downloaded."
           else
               echo "❌ Failed to download $font"

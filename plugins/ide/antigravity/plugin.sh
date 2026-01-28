@@ -1,10 +1,5 @@
-plugin_describe() { echo "antigravity - Google Antigravity repo (arm64)"; }
+plugin_describe() { echo "antigravity - Google Antigravity repo (x86_64)"; }
 plugin_install() {
-  if [[ "$(uname -m)" != "aarch64" ]]; then
-    echo "⚠️ Antigravity is only available for arm64 architectures. Skipping."
-    return
-  fi
-
   if [[ "$PM" == "apt" ]]; then
     echo "📦 Installing Antigravity for Debian/Ubuntu..."
     sudo mkdir -p /etc/apt/keyrings
